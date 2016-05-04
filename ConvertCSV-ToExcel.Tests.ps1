@@ -41,14 +41,22 @@ $Content = @'
 
     Context "Supplying the -Path parameter" {
 
-        It "Coonverts more than one CSV-formatted file to a single XLSX-formatted file in the specified directory" {
+        It "Converts more than one CSV-formatted file to a single XLSX-formatted file in the specified directory" {
             # act
-            Get-ChildItem 'TestDrive:\*.csv' | ConvertCSV-ToExcel -Output $xlsx -Path TestDrive: -Verbose
+            Get-ChildItem 'TestDrive:\*.csv' | ConvertCSV-ToExcel -Output $xlsx -Path 'TestDrive:' -Verbose
 
             # assert
             Get-ChildItem "TestDrive:\$xlsx" | Should Exist
         }
 
+    }
+
+    Context "Supplying the -EnableAutoFilter parameter" {
+        It "Enables the auto-filter for each sheet in the workbook" {}
+    }
+
+    Context "Supplying the -FreezePanes parameter" {
+        It "Freezes the top row of each sheet in the workbook" {}
     }
 
 }

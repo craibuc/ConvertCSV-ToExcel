@@ -49,27 +49,37 @@ Function ConvertCSV-ToExcel
   )]
   Param (
     [Parameter(
-    ValueFromPipeline=$True,
-    Position=0,
-    Mandatory=$True,
-    HelpMessage="Name of CSV/s to import")]
+      ValueFromPipeline=$True,
+      Position=0,
+      Mandatory=$True,
+      HelpMessage="Name of CSV/s to import")]
     [ValidateNotNullOrEmpty()]
     [array]$inputfile,
 
     [Parameter(
-    ValueFromPipeline=$False,
-    Position=1,
-    Mandatory=$True,
-    HelpMessage="Name of excel file output")]
+      ValueFromPipeline=$False,
+      Position=1,
+      Mandatory=$True,
+      HelpMessage="Name of excel file output")]
     [ValidateNotNullOrEmpty()]
     [string]$outputFile,
 
     [Parameter(
-    ValueFromPipeline=$False,
-    Position=2,
-    Mandatory=$False,
-    HelpMessage="The directory where the XLSX should be created; default is the current directory")]
-    [string]$path='.'
+      ValueFromPipeline=$False,
+      Position=2,
+      Mandatory=$False,
+      HelpMessage="The directory where the XLSX should be created; default is the current directory")]
+    [string]$path='.',
+
+    [Parameter(
+      Mandatory=$False,
+      HelpMessage="Enables each sheet's auto-filter")]
+    [switch]$EnableAutoFilter,
+
+    [Parameter(
+      Mandatory=$False,
+      HelpMessage="Freezes each sheet's top row")]
+    [switch]$FreezePanes
 
   )
 
@@ -154,6 +164,18 @@ Function ConvertCSV-ToExcel
 
       #Select all used cells
       $range = $worksheet.UsedRange
+
+      # freeze first row
+      if ( $FreezePanes ) {
+        $workSheet.Application.ActiveWindow.SplitRow = 1;
+        $workSheet.Application.ActiveWindow.FreezePanes = $true;        
+      }
+
+      # enable top-row filters
+      if ( $EnableAutoFilter ) {
+        $workSheet.EnableAutoFilter = $true; 
+        $workSheet.Cells.AutoFilter(1) | out-null;         
+      }
 
       #Autofit the columns
       $range.EntireColumn.Autofit() | out-null
