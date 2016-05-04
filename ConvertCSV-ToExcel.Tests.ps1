@@ -66,4 +66,8 @@ $Content = @'
         It "Freezes the top row of each sheet in the workbook" {}
     }
 
+    Context "Supplying the -BoldHeader parameter" {
+        It "Bolds the top row of each sheet in the workbook" {}
+    }
+
 }

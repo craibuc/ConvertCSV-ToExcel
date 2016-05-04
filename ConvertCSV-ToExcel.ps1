@@ -81,6 +81,12 @@ Function ConvertCSV-ToExcel
       HelpMessage="Freezes each sheet's top row")]
     [switch]$FreezePanes
 
+    # ,
+    # [Parameter(
+    #   Mandatory=$False,
+    #   HelpMessage="Bolds each sheet's top row")]
+    # [switch]$BoldHeader
+
   )
 
   Begin {
@@ -177,6 +183,12 @@ Function ConvertCSV-ToExcel
         $workSheet.Cells.AutoFilter(1) | out-null;         
       }
 
+      # # Set the header-row bold
+      # if ( $BoldHeader ) {
+      #   # The property 'Bold' cannot be found on this object.
+      #   $workSheet.Range["A1", "A1"].EntireRow.Font.Bold = $true; 
+      # }
+    
       #Autofit the columns
       $range.EntireColumn.Autofit() | out-null
 
