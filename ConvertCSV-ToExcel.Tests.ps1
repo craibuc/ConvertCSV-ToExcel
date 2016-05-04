@@ -28,20 +28,27 @@ $Content = @'
 
     Context "Supplying the manditory parameters; -InputFile via the pipeline" {
 
-        It -skip "Coonverts more than one CSV-formatted file to a single XLSX-formatted file in the current directory" {
+        It -"Coonverts more than one CSV-formatted file to a single XLSX-formatted file in the current directory" {
+
+            # make TestDrive:\ the current directory
+            pushd 'TestDrive:'
+
             # act
             Get-ChildItem 'TestDrive:\*.csv' | ConvertCSV-ToExcel -Output $xlsx -Verbose
 
             # assert
-            Get-ChildItem 'Output.xlsx' | Should Exist
+            Get-ChildItem ".\$xlsx" | Should Exist
+
+            # restore current directory
+            popd
+
         }
 
-        if ( Test-Path ".\$xlsx" ) { Remove-Item ".\$xlsx"}
     }
 
     Context "Supplying the -Path parameter" {
 
-        It "Converts more than one CSV-formatted file to a single XLSX-formatted file in the specified directory" {
+        It -skip "Converts more than one CSV-formatted file to a single XLSX-formatted file in the specified directory" {
             # act
             Get-ChildItem 'TestDrive:\*.csv' | ConvertCSV-ToExcel -Output $xlsx -Path 'TestDrive:' -Verbose
 
